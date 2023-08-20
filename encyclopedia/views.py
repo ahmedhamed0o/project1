@@ -17,24 +17,24 @@ def index(request):
     })
 def entry(request , title):
     html_content = convert_md_to_html(title)
-    if html_content == None:
+    if html_content is None:
         return render(request, "encyclopedia/error.html",{
-            "message": "this entry does not exist"
+            "mk1": "this entry does not exist"
         })
     else:
-        return render(request, "encyclopedia/entry.html",{
-            "title": title,
-            "content": html_content
-        } )
+        return render(request, "encyclopedia/entry.html", {
+         "title": title,
+         "content": html_content
+         }) 
 def search(request):
     if request.method == "POST":
         entry_search = request.POST['q']
         html_content = convert_md_to_html(entry_search)
         if html_content is not None:
             return render(request, "encyclopedia/entry.html",{
-            "title": entry_search,
-            "content": html_content
-            })
+              "title": entry_search,
+              "content": html_content
+             })
         else:
             allEntries = util.list_entries()
             recommendations = []
@@ -42,7 +42,7 @@ def search(request):
                 if entry_search.lower() in entry.lower():
                     recommendations.append(entry)
             return render(request,"encyclopedia/search.html",{
-                "recommendation" : recommendations
+                "recommendations" : recommendations
             })
 def new_page(request):
      if request.method == "GET":
@@ -53,13 +53,13 @@ def new_page(request):
             titleExist = util.get_entry(title)
             if titleExist is not None:
                 return render(request, "encyclopedia/error.html" , {
-                    "message" : "entry page already exists"
+                    "mk1" : "entry page already exists"
                 }) 
             else:
                 util.save_entry(title, content)
                 html_content = convert_md_to_html(title)
                 return render(request, "encyclopedia/entry.html", {
-                    title: title,
+                    "title": title,
                     "content": html_content
                 })
 
@@ -67,11 +67,12 @@ def edit(request):
     if request.method == "POST" :
         title = request.POST['entry_title']
         content = util.get_entry(title)
-        return render(request , "encyclopedia/edit.html", {
-            "title": title ,
-            "content": content
+        return render(request, "encyclopedia/edit.html", {
+         "title": title,
+         "content": content
+        })
 
-        } )
+        
 def save_edit(request):
     if request.method == "POST" :
      title = request.POST['title']
@@ -81,7 +82,7 @@ def save_edit(request):
      return render(request, "encyclopedia/entry.html", {
          "title": title,
          "content": html_content
-         })
+        })
 def rand(request):
     allEntries = util.list_entries()
     rand_entry = random.choice(allEntries)
@@ -89,5 +90,5 @@ def rand(request):
     return render(request, "encyclopedia/entry.html",{
        "title": rand_entry,
         "content": html_content
-        } )
+    } )
            
